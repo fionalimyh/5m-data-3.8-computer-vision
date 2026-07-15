@@ -13,8 +13,16 @@ single-file, offline-friendly nature.
 
 ## Source Materials
 
+- `3.8 - Computer Vision DS5.pdf`, slide 29 ("Convolutional Layers") — the
+  convolution/cross-correlation summation shown as a worked symbolic example
+  (`a11k11 + a12k12 + ...`), generalized here to
+  `(I✳K)[i,j] = ΣΣ I[i+m,j+n]·K[m,n]`.
 - `3.8 - Computer Vision DS5.pdf`, slide 34 ("Spatial Calculation") — the
   `n_out = floor((n_in + 2p - k)/s) + 1` formula and worked LeNet-5 example.
+- Confirmed via a full 49-slide text + visual scan that these are the only
+  two formulas (symbolic equations with variables) in the deck; other slides
+  contain either prose, kernel/value tables, or numeric-only worked examples
+  with no algebraic notation.
 - `3.8 - Computer Vision DS5.pdf`, slides 37–39 ("Batch Normalisation" /
   "Why Batch Normalisation" / "Why Batch Normalisation works") — the
   easier-to-converge loss-surface comparison, sigmoid saturation, and
@@ -58,9 +66,35 @@ for a concept that already stands on its own visually.
 ## Component 1 — Spatial Calculation Explorer
 
 **Placement:** Part 2 → Conv Layers subtab, replacing the current static
-"Computing Output Size" paragraph (keeps the `n_out` formula text as a
-caption, removes the hand-written LeNet-5 walkthrough sentence since the
-widget now demonstrates it live).
+"Computing Output Size" paragraph (keeps the formula text as captions,
+removes the hand-written LeNet-5 walkthrough sentence since the widget now
+demonstrates it live). Covers both formulas found in the PDF that relate to
+convolution: the operation itself (slide 29) and the resulting output size
+(slide 34).
+
+### Part A — Convolution Operation
+
+Directly under the existing "Convolutional Layers" paragraph (which
+currently only describes the dot-product in prose). Shows the general
+formula:
+
+```
+(I✳K)[i,j] = Σ_m Σ_n I[i+m, j+n] · K[m,n]
+```
+
+**Live demo:** a fixed small input grid (e.g. 5×5, editable cell values via
+click-to-cycle or number inputs) and a fixed 3×3 kernel (a dropdown of the
+named kernels already in the "Filter Type" table — Blur, Sharpen, Edge
+Detection, Emboss — plus "Custom" with editable cells), with one highlighted
+input patch. Each of the 9 multiply pairs is shown lighting up in sequence
+(or on hover) with its product, summing into the single highlighted output
+cell, whose value updates live as the kernel or input values change. A
+"Slide" button moves the highlighted patch to the next position (left to
+right, top to bottom), recomputing the corresponding output cell each time,
+so by the end the full output feature map has been filled in one cell at a
+time.
+
+### Part B — Output Size
 
 **Controls:** four stepper inputs (+/− buttons, not free-drag sliders, since
 only small integers are meaningful):
@@ -86,7 +120,9 @@ large `n_in` values don't produce thousands of SVG nodes.
 
 **Preset button:** "Load LeNet-5 CONV1 example" sets `n_in=32, k=5, p=0,
 s=1` (matching the worked example already in the text), confirming
-`n_out=28`.
+`n_out=28`. Part A and Part B share visual style (same grid-cell rendering
+approach) but are independent widgets — sliding the Part A patch does not
+drive Part B's window, since they demonstrate two different formulas.
 
 ## Component 2 — Backprop Chain Rule Walkthrough
 
