@@ -85,7 +85,8 @@
   .subtab-panel.active { display: block; }
 
   section.card { background: var(--bg-alt); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px 24px; margin-bottom: 20px; }
-  section.card h3 { margin-top: 0; }
+  section.card h3:first-of-type { margin-top: 0; }
+  section.card h3:not(:first-of-type) { margin-top: 28px; }
   section.card img, section.card .img-row img { max-width: 100%; border-radius: 6px; border: 1px solid var(--border); }
   .img-row { display: flex; flex-wrap: wrap; gap: 12px; margin: 12px 0; }
   .img-row figure { margin: 0; flex: 1 1 260px; }
@@ -173,12 +174,32 @@
       <div class="subtab-panel active" data-subpanel="intro">
         <section class="card">
           <h3>What is Computer Vision?</h3>
-          <p>Computer vision is a field of AI that enables computers to interpret and understand the visual world, combining image processing (acquiring, analyzing, enhancing images) with machine learning (learning from and deciding based on visual data). Its scope includes image classification, object detection, object tracking, image segmentation, image restoration, scene reconstruction, event detection, image captioning, and pattern recognition.</p>
-          <p><strong>Brief history:</strong> early automated object-recognition systems date to the 1950s, with major advances in the 1970s–80s as algorithms and compute improved. Machine learning and feature extraction matured through the 1990s–2000s, and the 2010s introduction of deep learning &mdash; especially CNNs &mdash; revolutionized classification and detection.</p>
+          <p>Computer vision is a field of AI that enables computers to interpret and understand visual information &mdash; images or video &mdash; the way humans do. In practical terms, it means teaching computers to:</p>
+          <ul>
+            <li><strong>See:</strong> capture images or video using cameras or sensors.</li>
+            <li><strong>Process:</strong> analyze the content (e.g. detecting edges, patterns, shapes).</li>
+            <li><strong>Understand:</strong> recognize objects, classify scenes, detect movement, track people or things.</li>
+            <li><strong>Act:</strong> make decisions based on the visual input (e.g. a self-driving car stopping for a pedestrian).</li>
+          </ul>
+          <p>Its scope includes image classification, object detection, object tracking, image segmentation, image restoration, scene reconstruction, event detection, image captioning, and pattern recognition.</p>
           <div class="img-row">
             <figure><img src="img/image_segmentation.jpeg" alt="Image segmentation example"><figcaption>Image segmentation, one of CV's core tasks</figcaption></figure>
           </div>
+          <h4>Brief History</h4>
+          <ul>
+            <li><strong>1966:</strong> The Summer Vision Project &mdash; one of the earliest attempts at automated image understanding.</li>
+            <li><strong>1960s:</strong> Early techniques for pattern recognition and image understanding explored.</li>
+            <li><strong>1970s:</strong> Advancement in edge detection and feature extraction.</li>
+            <li><strong>1980s:</strong> More quantitative, mathematical approaches to computer vision explored.</li>
+            <li><strong>Late 1990s:</strong> More sophisticated algorithms &mdash; image-based rendering and image morphing.</li>
+            <li><strong>1990s:</strong> Object, optical-character, and facial recognition explored.</li>
+            <li><strong>2000s:</strong> Machine learning applied to real-world CV problems.</li>
+            <li><strong>2010s:</strong> Deep learning &mdash; especially CNNs &mdash; revolutionizes classification and detection.</li>
+          </ul>
           <p><strong>Applications:</strong> Healthcare (diagnosing disease from X-rays/MRIs/CT scans), Automotive (autonomous vehicles, ADAS), Retail (consumer behavior, inventory, virtual fitting rooms), Manufacturing (quality control, defect detection), Agriculture (crop monitoring, automated harvesting), Security (surveillance, facial recognition), Entertainment (AR/VR), Smartphones (face unlock, camera AR).</p>
+          <h4>Two Applications in Detail</h4>
+          <p><strong>Image-based translation</strong> (e.g. a translation-camera app) chains several CV/NLP steps: text detection (locating words in the image), text recognition (OCR turns characters into digital text), language translation (NLP translates the text), and rendering (translated text is overlaid back onto the image, matching font and background).</p>
+          <p><strong>Object detection</strong> combines classification (what is it?) with localization (where is it?), drawing bounding boxes around each detected object. Models like <strong>YOLO</strong> (You Only Look Once) do this in real time, outputting an object class (e.g. "cat"), a confidence score (e.g. 94%), and box coordinates. Used in autonomous vehicles (pedestrians, other cars, traffic signs), retail (shelf tracking), surveillance (spotting intruders), and agriculture (counting fruit, detecting crop disease).</p>
         </section>
       </div>
 
@@ -196,30 +217,61 @@
       <div class="subtab-panel" data-subpanel="color">
         <section class="card">
           <h3>Color Spaces and Conversions</h3>
-          <p>Images can be converted between color spaces with either library &mdash; e.g. RGB to grayscale, or RGB to HSV (hue/saturation/value), which is often more convenient than RGB for tasks like color-based thresholding.</p>
+          <p>A color space is a specific way of organizing and representing colors. Images can be converted between color spaces with either library &mdash; e.g. RGB to grayscale, or RGB to HSV (hue/saturation/value). Different color spaces make different tasks easier &mdash; for example, detecting skin tones, isolating bright objects, or enhancing contrast.</p>
           <div class="img-row">
             <figure><img src="img/gray_pil.png" alt="Grayscale conversion using PIL"><figcaption>Grayscale via PIL (<code>.convert('LA')</code>)</figcaption></figure>
             <figure><img src="img/gray_opencv.png" alt="Grayscale conversion using OpenCV"><figcaption>Grayscale via OpenCV (<code>cv2.COLOR_BGR2GRAY</code>)</figcaption></figure>
             <figure><img src="img/hsv.png" alt="HSV color space conversion"><figcaption>HSV conversion via OpenCV</figcaption></figure>
           </div>
+          <table class="plan-table">
+            <thead><tr><th>Task</th><th>Preferred Color Space</th><th>Why It's Preferred</th></tr></thead>
+            <tbody>
+              <tr><td>Skin detection</td><td>HSV / YCrCb</td><td>Separates color from brightness, making skin tones easier to isolate</td></tr>
+              <tr><td>Object color tracking</td><td>HSV</td><td>Hue is stable under lighting changes &mdash; great for tracking consistent colors</td></tr>
+              <tr><td>Edge/shape detection</td><td>Grayscale</td><td>Simplifies the image to intensity only, making edge detection faster and more effective</td></tr>
+              <tr><td>Color correction</td><td>LAB</td><td>Mimics human vision and isolates lightness, enabling precise color adjustments</td></tr>
+              <tr><td>Compression (video)</td><td>YCrCb</td><td>Efficiently separates luminance from chrominance &mdash; better compression with less loss</td></tr>
+            </tbody>
+          </table>
         </section>
       </div>
 
       <div class="subtab-panel" data-subpanel="classical">
         <section class="card">
           <h3>Image Filtering &amp; Convolution</h3>
-          <p>Image filtering enhances or suppresses features in an image. Convolution applies a small kernel (filter) over the image to produce a filtered output &mdash; the same core operation CNNs later learn to apply automatically.</p>
+          <p>Image filtering enhances or suppresses features in an image. Convolution applies a small kernel (filter, also called a mask) over the image to produce a filtered output &mdash; the same core operation CNNs later learn to apply automatically.</p>
+          <table class="plan-table">
+            <thead><tr><th>Filter Type</th><th>Purpose</th><th>Example 3&times;3 Kernel</th></tr></thead>
+            <tbody>
+              <tr><td>Blur / Smoothing</td><td>Reduce noise, soften image</td><td><code>[[1,1,1],[1,1,1],[1,1,1]] / 9</code></td></tr>
+              <tr><td>Sharpen</td><td>Enhance edges, highlight details</td><td><code>[[0,-1,0],[-1,5,-1],[0,-1,0]]</code></td></tr>
+              <tr><td>Edge Detection</td><td>Find object boundaries</td><td>Sobel, Prewitt, or Laplacian filters</td></tr>
+              <tr><td>Emboss</td><td>Create a 3D-like shaded effect</td><td><code>[[-2,-1,0],[-1,1,1],[0,1,2]]</code></td></tr>
+              <tr><td>Gaussian Blur</td><td>Smooth while preserving edge structure</td><td>Weighted Gaussian kernel</td></tr>
+            </tbody>
+          </table>
           <h4>Gaussian Blur</h4>
           <p>A smoothing technique that reduces noise and detail by convolving the image with a Gaussian-weighted kernel, blurring while preserving edges better than a simple mean filter.</p>
           <div class="img-row">
             <figure><img src="img/gaussian_blur.png" alt="Original vs Gaussian blurred image"><figcaption>Original vs. Gaussian-blurred</figcaption></figure>
           </div>
-          <h4>Edge Detection: Sobel &amp; Canny</h4>
+          <h4>Edge Detection</h4>
+          <p>Edge detection identifies the boundaries of objects within an image &mdash; the points where pixel intensity changes significantly &mdash; helping distinguish different regions of an image.</p>
+          <table class="plan-table">
+            <thead><tr><th>Method</th><th>Purpose</th><th>Use Case</th></tr></thead>
+            <tbody>
+              <tr><td>Sobel Operator</td><td>Detects edges using gradients</td><td>General-purpose edge detection</td></tr>
+              <tr><td>Canny Edge Detection</td><td>High-precision, multi-stage edge detection</td><td>Complex images, medical imaging, object tracking</td></tr>
+              <tr><td>Prewitt Operator</td><td>Detects edges with simpler kernels</td><td>Faster edge detection in simple images</td></tr>
+              <tr><td>Laplacian of Gaussian</td><td>Detects sharp intensity changes</td><td>Edge detection in noisy or complex images</td></tr>
+            </tbody>
+          </table>
           <p><strong>Sobel</strong> convolves the image with a pair of 3x3 kernels (x- and y-direction gradients) and combines them into an edge-strength map. <strong>Canny</strong> is a multi-stage detector: Gaussian noise reduction &rarr; gradient calculation &rarr; non-maximum suppression &rarr; double thresholding &rarr; edge tracking by hysteresis. Canny is generally better at localizing edges and more robust to noise.</p>
           <div class="img-row">
             <figure><img src="img/sobel.png" alt="Sobel X and Y edge detection"><figcaption>Sobel X / Y gradients</figcaption></figure>
             <figure><img src="img/canny.png" alt="Canny edge detection"><figcaption>Canny edges</figcaption></figure>
           </div>
+          <p><strong>Why edge detection matters:</strong> it underpins object detection (identifying boundaries of objects), image segmentation (splitting an image into meaningful parts), feature extraction (extracting shapes and lines), and simplification (reducing image complexity by focusing on key structure).</p>
           <h4>Image Segmentation: Thresholding</h4>
           <p>Thresholding converts a grayscale image into a binary image: pixels above a threshold become one value (e.g. white), pixels below become another (e.g. black) &mdash; a simple way to separate an object from its background.</p>
           <div class="img-row">
@@ -244,16 +296,31 @@
 
       <div class="subtab-panel active" data-subpanel="conv">
         <section class="card">
+          <h3>How Does AI Classify an Image?</h3>
+          <p>Classifying images is harder than it looks: the same object can appear <strong>distorted</strong>, <strong>occluded</strong> (partly hidden), photographed from a different <strong>viewpoint</strong>, under different <strong>illumination</strong>, at a different <strong>scale</strong>, or against noisy <strong>backgrounds</strong> &mdash; and a good model still has to recognize it as the same class every time.</p>
+          <h4>Why CNNs, Not a Plain Feedforward Network?</h4>
+          <p>A naive approach would flatten an image into a single vector of pixel values and feed it into a fully connected (feedforward) network. CNNs do better on three fronts:</p>
+          <ul>
+            <li><strong>Compute:</strong> flattening a large image produces an enormous input vector; a fully connected layer over it needs an equally enormous number of weights. Convolution instead reuses (shares) a small set of kernel weights across the whole image.</li>
+            <li><strong>Generalization:</strong> a feedforward net treats every pixel position as unrelated, so it must relearn a pattern separately for every location it might appear in. A convolutional kernel detects a pattern anywhere it occurs (translation invariance).</li>
+            <li><strong>Correlations:</strong> flattening destroys the 2D spatial relationships between neighboring pixels. Convolution operates on local neighborhoods, so it preserves and exploits spatial correlation.</li>
+          </ul>
           <h3>CNN Architecture Overview</h3>
           <p>A typical CNN is built from: an <strong>Input Layer</strong> (raw pixels), <strong>Convolutional Layers</strong> (the core feature-extracting building block), an <strong>Activation/ReLU Layer</strong> (adds non-linearity), <strong>Pooling Layers</strong> (reduce spatial size/parameters), <strong>Fully Connected Layers</strong> (combine features for classification), and an <strong>Output Layer</strong> (class probabilities).</p>
           <div class="img-row">
             <figure><img src="img/cnn.png" alt="CNN architecture diagram"><figcaption>A typical CNN architecture</figcaption></figure>
           </div>
           <h4>Convolutional Layers</h4>
-          <p>A convolution slides a small kernel (matrix of weights) across the image, computing a dot product at each position to produce a feature map highlighting patterns like edges or textures. <strong>Padding</strong> (commonly zero-padding) preserves spatial dimensions at the borders; <strong>stride</strong> controls how many pixels the kernel moves each step &mdash; larger strides shrink the output.</p>
+          <p>A convolution slides a small kernel (matrix of weights) across the image, computing a dot product at each position to produce a feature map highlighting patterns like edges or textures. <strong>Padding</strong> (commonly zero-padding) preserves spatial dimensions at the borders, keeps information at the image edges from being under-used, and gives control over the output size; <strong>stride</strong> controls how many pixels the kernel moves each step &mdash; larger strides shrink the output and reduce overlap between receptive fields.</p>
           <div class="img-row">
             <figure><img src="img/convolution.gif" alt="Convolution operation animation"><figcaption>The convolution operation (kernel sliding over the input)</figcaption></figure>
           </div>
+          <h4>Kernel Size Trade-offs</h4>
+          <p>Kernel size affects what a convolution can capture: a <strong>1&times;1</strong> kernel only performs a linear combination at a single pixel and can't capture any spatial pattern. A <strong>2&times;2</strong> kernel captures a small local region but is still too small for complex patterns and introduces redundant, inefficient parameters. Even-sized kernels also don't divide the surrounding pixels symmetrically around an output pixel, which can distort deeper layers &mdash; this is why odd-sized kernels (3&times;3, 5&times;5, ...) are preferred in practice.</p>
+          <h4>Computing Output Size</h4>
+          <p>The spatial size of a convolution's output follows:</p>
+          <p style="text-align:center"><code>n_out = floor((n_in + 2p &minus; k) / s) + 1</code></p>
+          <p>where <code>n_in</code>/<code>n_out</code> are the input/output size, <code>k</code> is the kernel size, <code>p</code> is padding, and <code>s</code> is stride. For example, a classic LeNet-5-style network on a 32&times;32&times;3 input: CONV1 (6 filters, k=5, s=1, p=0) &rarr; 28&times;28&times;6 &rarr; POOL1 (k=2, s=2) &rarr; 14&times;14&times;6 &rarr; CONV2 (16 filters, k=5, s=1, p=0) &rarr; 10&times;10&times;16 &rarr; POOL2 (k=2, s=2) &rarr; 5&times;5&times;16, which is then flattened to a 400-length vector (5&times;5&times;16) and fed into the fully connected layers.</p>
           <h4>Hierarchical Feature Learning</h4>
           <p>CNNs learn a hierarchy of features automatically: early layers learn <strong>low-level</strong> features (edges, basic textures), middle layers learn <strong>mid-level</strong> features (shapes, textural patterns), and deep layers learn <strong>high-level</strong> features (entire objects/scenes). ReLU is the standard activation used after convolutions for its efficiency and effectiveness.</p>
         </section>
@@ -275,15 +342,22 @@
           <h3>Fully Connected Layers &amp; Classification</h3>
           <p>After the convolution/pooling stack, a CNN typically transitions to fully connected (FC) layers, where every neuron connects to all activations in the previous layer &mdash; just like a standard neural network. The FC stack takes the high-level features learned earlier and uses them to classify the input.</p>
           <p>The final FC layer has one neuron per class, and a <strong>softmax</strong> activation converts the raw outputs into a probability distribution over the classes.</p>
+          <h4>Practical Applications of CNNs</h4>
+          <ul>
+            <li><strong>Image classification:</strong> assigning images to predefined categories &mdash; e.g. automatic photo organization in social media platforms.</li>
+            <li><strong>Object detection:</strong> identifying and locating multiple objects within an image &mdash; e.g. shelf scanning in retail to spot out-of-stock items.</li>
+            <li><strong>Facial recognition:</strong> embedded into security systems for access control based on facial features.</li>
+          </ul>
         </section>
       </div>
 
       <div class="subtab-panel" data-subpanel="reg">
         <section class="card">
           <h3>Training Techniques: Augmentation, BatchNorm, Dropout</h3>
-          <p><strong>Data Augmentation</strong> increases training-set diversity via random transformations (rotation, scaling, translation, flipping, cropping) &mdash; helping the model generalize.</p>
-          <p><strong>Batch Normalization</strong> normalizes each layer's inputs to zero mean / unit variance (with learned scale &amp; shift), combating internal covariate shift and enabling higher learning rates and faster convergence.</p>
-          <p><strong>Dropout</strong> randomly zeroes a fraction of a layer's outputs during training, a regularization technique that reduces overfitting by preventing co-adaptation of neurons.</p>
+          <p><strong>Data Augmentation</strong> increases training-set diversity via random transformations applied to the original image &mdash; horizontal/vertical flips, &plusmn;45&deg; rotation, blur, brightening/darkening, added noise, grayscale conversion, and cropping &mdash; helping the model generalize to variations it will see at inference time.</p>
+          <p><strong>Batch Normalization</strong> normalizes each layer's inputs to zero mean / unit variance (with learned scale &amp; shift), applied per mini-batch rather than over the whole dataset. It addresses <strong>internal covariate shift</strong>: as earlier layers' weights update during training, the distribution of inputs to later layers keeps shifting, forcing those layers to constantly re-adapt and slowing/destabilizing training. Standardizing each mini-batch's activations counters this, which is why BatchNorm makes networks easier to converge, helps prevent vanishing gradients, and has a mild regularizing effect.</p>
+          <p><strong>Where to apply it:</strong> most commonly after a convolution and before the activation (<code>Conv2D &rarr; BatchNorm &rarr; ReLU</code>) &mdash; this is standard in architectures like ResNet and VGG. It's also used, less commonly, in fully connected/linear layers (<code>Linear &rarr; BatchNorm1d &rarr; ReLU</code>), especially when input features vary significantly in scale.</p>
+          <p><strong>Dropout</strong> randomly zeroes a fraction of a layer's outputs during training, a regularization technique that reduces overfitting by preventing co-adaptation of neurons and forcing the network to learn redundant representations. Common dropout rates are <strong>0.2&ndash;0.5</strong>; rates set too high can hinder learning.</p>
         </section>
       </div>
     </section>
@@ -326,6 +400,7 @@
         <button class="active" data-subtab="concept">Concept</button>
         <button data-subtab="resnet">ResNet</button>
         <button data-subtab="strategy">Feature Extraction vs. Fine-Tuning</button>
+        <button data-subtab="limits">When It's Not Ideal</button>
       </nav>
 
       <div class="subtab-panel active" data-subpanel="concept">
@@ -333,6 +408,9 @@
           <h3>Transfer Learning</h3>
           <p>Transfer learning reuses a model developed for one task as the starting point for a second task &mdash; instead of training from scratch. Models pre-trained on huge benchmark datasets like <a href="https://en.wikipedia.org/wiki/ImageNet" target="_blank" rel="noopener">ImageNet</a> (1M+ images, 1000 categories) offer three main benefits: <strong>time-saving</strong> (skip most of the training time), <strong>improved performance</strong> (especially with limited new-task data), and reusable <strong>feature extraction</strong> (learned features transfer even to different classes).</p>
           <p>Popular pre-trained CNN architectures include LeNet-5, AlexNet, VGGNet, GoogLeNet (Inception), and ResNet.</p>
+          <h4>Why It Works</h4>
+          <p>A CNN's early layers learn general features &mdash; vertical/horizontal edges, corners, simple textures &mdash; that are independent of the specific classes the model was trained on. Models don't literally "know" what a cat looks like; they learn how small components combine into higher-level features. Recognition of the specific entity happens later, at the dense (fully connected) layers that take the convolutional features as input and map them to a final class.</p>
+          <p>To apply transfer learning, you remove the pre-trained model's dense layers (trained to recognize its original classes) and attach new ones, then retrain just those new layers to specialize in your classes of interest.</p>
         </section>
       </div>
 
@@ -352,6 +430,18 @@
           <p>The notebook applies this to CIFAR-10 using a pre-trained ResNet, replacing the final layer for the 10 CIFAR-10 classes. Full training runs are computationally heavy on CPU and are recommended to run on GPU (e.g. Google Colab).</p>
         </section>
       </div>
+
+      <div class="subtab-panel" data-subpanel="limits">
+        <section class="card">
+          <h3>When Transfer Learning May Not Be Ideal</h3>
+          <p>Transfer learning is powerful, but it isn't always the right call:</p>
+          <ol>
+            <li><strong>Your task/dataset is very different from the pre-trained model's task.</strong> Transfer learning works best when the source and target domains are similar. A model trained on ImageNet's natural images may transfer poorly to, say, medical scans (X-rays, MRIs), whose feature statistics look nothing like everyday photos.</li>
+            <li><strong>Insufficient data for fine-tuning.</strong> Adapting a pre-trained model usually still requires some fine-tuning data. With only a few hundred images, fine-tuning can overfit &mdash; the pre-trained weights may not generalize well to such a small dataset, sometimes performing worse than training from scratch.</li>
+            <li><strong>The task requires deep domain-specific knowledge.</strong> Models pre-trained on general datasets may not capture the specialized features a niche domain needs &mdash; e.g. a general-purpose language model won't have been exposed to the vocabulary and structure of a specific legal-document corpus.</li>
+          </ol>
+        </section>
+      </div>
     </section>
 
     <section class="tab-panel" data-panel="resources">
@@ -363,6 +453,7 @@
           <li><a href="../assignment.md">Assignment</a> &mdash; build a Fashion MNIST image classifier</li>
           <li><a href="../reference.md">Reference</a> &mdash; external documentation links</li>
           <li><a href="../notebooks/computer_vision_lesson.ipynb">Lesson Notebook</a> &mdash; the full code-along notebook this summary is based on</li>
+          <li><a href="../3.8%20-%20Computer%20Vision%20DS5.pdf">Lesson Slides (PDF)</a> &mdash; the lecture deck this summary is based on</li>
         </ul>
       </section>
       <section class="card">
